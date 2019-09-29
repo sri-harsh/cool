@@ -1,8 +1,12 @@
 import sys,tweepy,csv,re
+import pyautogui as pi
+import time as ti
 from textblob import TextBlob
 import matplotlib.pyplot as plt
 
-
+ti.sleep(18)
+pi.hotkey('alt','tab')
+pi.typewrite(['f5'])
 class SentimentAnalysis:
 
     def __init__(self):
@@ -11,18 +15,26 @@ class SentimentAnalysis:
 
     def DownloadData(self):
         
-        consumerKey = 'VUYinmUXDCXFOpVCs6JaPwXVO'
-        consumerSecret = 'F0SOaP00njdExQb8ufODVv2zIVAiQlBXm3Wcc2loVRHB00aol9'
-        accessToken = '1038489334163243009-jhvAcrDcPAELkAgD0Ix7ahWvf1GdbL'
-        accessTokenSecret = 'ayGiHFHGCVq70ozKVh0UsU5fscGdckdsJyvRxQFtDCcNs'
+        consumerKey = 'fXSIxEtFuR2m9vcsuWrd5QNrY'
+        consumerSecret = 'OQZwnvZ9ppRiAbwLoPDTWSHcgdFtmSUXlVNfxqHiCZapI7Bygw'
+        accessToken = '1038489334163243009-ZxWhsWrPQ2llqM7wUBwMUL0NtxjyCA'
+        accessTokenSecret = '5Yn4K1TkXcQTVClEJrn7MLa9aiR9W6JzTEuWlgH5dkwJE'
         auth = tweepy.OAuthHandler(consumerKey, consumerSecret)
         auth.set_access_token(accessToken, accessTokenSecret)
         api = tweepy.API(auth)
 
-       
-        searchTerm = "Hrisheekesh4"
+        file=open("data.txt","r")
+        filey=file.read()
+        searchTerm = filey
+        print(searchTerm)
         NoOfTerms = 9
-
+        followers = []
+        user = api.get_user(searchTerm)
+        for user in user.followers():
+            followers.append(user.screen_name)
+#        print(followers)
+        
+        print(followers)
        
         self.tweets = tweepy.Cursor(api.search, q=searchTerm, lang = "en").items(NoOfTerms)
 
@@ -49,34 +61,34 @@ class SentimentAnalysis:
            
             polarity += analysis.sentiment.polarity 
             flag=0
-            if k!=9 and (analysis.sentiment.polarity == 0): 
+            if k!=NoOfTerms and (analysis.sentiment.polarity == 0): 
                 neutral += 1
-            elif k!=9 and (analysis.sentiment.polarity > 0 and analysis.sentiment.polarity <= 1):
+            elif k!=NoOfTerms and (analysis.sentiment.polarity > 0 and analysis.sentiment.polarity <= 1):
                 positive += 1
-            elif k!=9 and (analysis.sentiment.polarity > -1 and analysis.sentiment.polarity <= 0):
+            elif k!=NoOfTerms and (analysis.sentiment.polarity > -1 and analysis.sentiment.polarity <= 0):
                 negative += 1
-            elif k==9 and (analysis.sentiment.polarity == 0): 
+            elif k==NoOfTerms and (analysis.sentiment.polarity == 0): 
                 neutral += 2
                 flag=1
-            elif k==9 and (analysis.sentiment.polarity > 0 and analysis.sentiment.polarity <= 1):
+            elif k==NoOfTerms and (analysis.sentiment.polarity > 0 and analysis.sentiment.polarity <= 1):
                 positive += 2
                 flag=2
-            elif k==9 and (analysis.sentiment.polarity > -1 and analysis.sentiment.polarity <= 0):
+            elif k==NoOfTerms and (analysis.sentiment.polarity > -1 and analysis.sentiment.polarity <= 0):
                 negative += 2
                 flag=3
             if flag==1:
-                neutral=neutral-(neutral-1)*(1/9)
-                positive=positive-(positive)*(1/9)
-                negative=negative-(negative)*(1/9)
+                neutral=neutral-(neutral-1)*(1/NoOfTerms)
+                positive=positive-(positive)*(1/NoOfTerms)
+                negative=negative-(negative)*(1/NoOfTerms)
             elif flag==2:
-                positive=positive-(positive-1)*(1/9)
-                neutral=neutral-(neutral)*(1/9)
-                negative=negative-(negative)*(1/9)
+                positive=positive-(positive-1)*(1/NoOfTerms)
+                neutral=neutral-(neutral)*(1/NoOfTerms)
+                negative=negative-(negative)*(1/NoOfTerms)
                 
             elif flag==3:
-                negative=negative-(negative-1)*(1/9)
-                positive=positive-(positive)*(1/9)
-                neutral=neutral-(neutral)*(1/9)
+                negative=negative-(negative-1)*(1/NoOfTerms)
+                positive=positive-(positive)*(1/NoOfTerms)
+                neutral=neutral-(neutral)*(1/NoOfTerms)
                 
      
         csvWriter.writerow(self.tweetText)
@@ -130,7 +142,8 @@ class SentimentAnalysis:
         plt.show()
 
 
+sa = SentimentAnalysis()
+sa.DownloadData()
 
-if __name__== "__main__":
-    sa = SentimentAnalysis()
-    sa.DownloadData()
+
+    
