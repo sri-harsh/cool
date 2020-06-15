@@ -1,4 +1,4 @@
-Sentiment analysis of social media users using Natural Language Processing and Machine Learning
+# Sentiment analysis of social media users using Natural Language Processing and Machine Learning
 
 Stress in students is a worrying factor and many times it leads to depression/hypertension, where in a few cases, the person may take drastic steps. Majority of the people use smartphones and are very active on social media. The tool we are working on is used to understand the psychological and emotional state of the people(/students) by analyzing their social media behavior.
 
